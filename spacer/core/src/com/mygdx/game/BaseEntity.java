@@ -5,11 +5,13 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.sprites.SMainShip;
 
 public class BaseEntity {
     protected Rectangle hbox;
     protected Sprite sprite;
+    protected Vector2 rotation;
 
     protected float x, y;
 
