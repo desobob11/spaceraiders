@@ -1,6 +1,7 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -11,6 +12,7 @@ public class Game extends ApplicationAdapter {
 	public static final float WIN_HEIGHT = 800f;
 
 
+	AssetManager manager = new AssetManager();
 	SpriteBatch batch;
 	Player player;
 
@@ -18,24 +20,25 @@ public class Game extends ApplicationAdapter {
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
-		player = new Player();
+		player = new Player(manager);
 	}
 
 	@Override
 	public void render () {
-		if (player.base_asset_update()) {
-
+		if (manager.update()) {
+			ScreenUtils.clear(0, 0, 0, 1);
+			batch.begin();
+			player.update(batch, manager);
+			batch.end();
 		}
 
-		ScreenUtils.clear(0, 0, 0, 1);
-		batch.begin();
-		player.update(batch);
-		batch.end();
+		float progress = manager.getProgress();
+
 	}
 	
 	@Override
 	public void dispose () {
 		batch.dispose();
-		player.dispose();
+		manager.dispose();
 	}
 }
