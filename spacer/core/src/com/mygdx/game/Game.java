@@ -4,28 +4,38 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.mygdx.game.sprites.SMainShip;
 
-public class MyGdxGame extends ApplicationAdapter {
+public class Game extends ApplicationAdapter {
+	public static final float WIN_WIDTH = 1100f;
+	public static final float WIN_HEIGHT = 800f;
+
+
 	SpriteBatch batch;
-	Texture img;
-	
+	Player player;
+
+
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
-		img = new Texture("badlogic.jpg");
+		player = new Player();
 	}
 
 	@Override
 	public void render () {
-		ScreenUtils.clear(1, 0, 0, 1);
+		if (player.base_asset_update()) {
+
+		}
+
+		ScreenUtils.clear(0, 0, 0, 1);
 		batch.begin();
-		batch.draw(img, 0, 0);
+		player.update(batch);
 		batch.end();
 	}
 	
 	@Override
 	public void dispose () {
 		batch.dispose();
-		img.dispose();
+		player.dispose();
 	}
 }
