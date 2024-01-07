@@ -16,9 +16,9 @@ import com.mygdx.game.sprites.SMainShip;
 
 public class Player extends BaseEntity {
     private final float SPAWN_X = Game.WIN_WIDTH / 2;
-    private final float SPAWN_Y = 100f;
+    private final float SPAWN_Y = Game.WIN_HEIGHT / 2;
 
-    private final float MOVE_SPEED = 10f;
+    private final float MOVE_SPEED = 5f;
     private boolean is_instantiated = false;
 
     public Player(AssetManager manager) {
@@ -33,7 +33,7 @@ public class Player extends BaseEntity {
         if (!is_instantiated) {
             instantiate(manager);
         }
-        move();
+        move(cam);
         follow_cursor(cam);
         draw(batch);
     }
@@ -46,8 +46,6 @@ public class Player extends BaseEntity {
 
         angle = (float) Math.toDegrees(angle);
         this.sprite.setRotation(-angle);
-        System.out.println(this.sprite.getX());
-        System.out.println(this.sprite.getOriginX());
     }
 
     public void instantiate(AssetManager manager) {
@@ -59,20 +57,30 @@ public class Player extends BaseEntity {
         this.is_instantiated = true;
     }
 
-    private void move() {
+    private void move(OrthographicCamera cam) {
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-            translate(0, MOVE_SPEED);
+            if (cam.position.y + (cam.viewportHeight) <= 3000) {
+                translate(0, MOVE_SPEED);
+            }
         }
         if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-            translate(0, -MOVE_SPEED);
+           if (cam.position.y + (cam.viewportHeight) >= 1400) {
+               System.out.println(cam.position.y + (cam.viewportHeight));
+               translate(0, -MOVE_SPEED);
+           }
         }
 
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-            translate(-MOVE_SPEED, 0);
+            if (cam.position.x - (cam.viewportWidth / 2) >= 0) {
+                translate(-MOVE_SPEED, 0);
+            }
         }
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-            translate(MOVE_SPEED, 0);
+            if (cam.position.x + (cam.viewportWidth / 2) <= 3000) {
+                translate(MOVE_SPEED, 0);
+            }
         }
+        cam.position.set(sprite.getX() + sprite.getOriginX(), sprite.getY() + sprite.getOriginY(), 0);
     }
 
     public boolean isInstantiated() {

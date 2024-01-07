@@ -17,17 +17,18 @@ public class Game extends ApplicationAdapter {
 	AssetManager manager = new AssetManager();
 	SpriteBatch batch;
 	Player player;
-	float camera_zoom = 0.5f;
+	float camera_zoom = 0.3f;
 
 
 	@Override
 	public void create () {
 		cam = new OrthographicCamera(WIN_WIDTH, WIN_HEIGHT);
-		cam.position.set(cam.viewportWidth / 2f, cam.viewportHeight / 2f, 0);
+		cam.position.set(WIN_WIDTH / 2, WIN_HEIGHT / 2, 0);
 		cam.zoom -= camera_zoom;
 		cam.update();
 		batch = new SpriteBatch();
 		player = new Player(manager);
+		manager.load(String.format("%s\\backgrounds\\lvl1.png", System.getProperty("user.dir")), Texture.class);
 	}
 
 	@Override
@@ -36,6 +37,7 @@ public class Game extends ApplicationAdapter {
 			ScreenUtils.clear(0, 0, 0, 1);
 			batch.setProjectionMatrix(cam.combined);
 			batch.begin();
+			batch.draw((Texture) manager.get(String.format("%s\\backgrounds\\lvl1.png", System.getProperty("user.dir"))), 0, 0);
 			player.update(batch, manager, cam);
 			cam.update();
 			batch.end();
