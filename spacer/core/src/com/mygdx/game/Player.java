@@ -29,28 +29,29 @@ public class Player extends BaseEntity {
         if (!is_instantiated) {
             instantiate(manager);
         }
-        draw(batch);
         move();
+        draw(batch);
     }
 
     public void instantiate(AssetManager manager) {
         this.sprite = new Sprite((Texture) manager.get(SMainShip.SMAINSHIP_FULL.get()));
         this.sprite.setPosition(SPAWN_X, SPAWN_Y);
         this.hbox = new Rectangle(SPAWN_X, SPAWN_Y, sprite.getWidth(), sprite.getHeight());
+        this.is_instantiated = true;
     }
 
     private void move() {
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
             translate(0, MOVE_SPEED);
         }
-        else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.S)) {
             translate(0, -MOVE_SPEED);
         }
 
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             translate(-MOVE_SPEED, 0);
         }
-        else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             translate(MOVE_SPEED, 0);
         }
     }
