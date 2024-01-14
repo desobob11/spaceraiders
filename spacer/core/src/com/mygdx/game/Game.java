@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.mygdx.game.levels.LBackgrounds;
 import com.mygdx.game.sprites.SMainShip;
 
 public class Game extends ApplicationAdapter {
@@ -15,7 +16,7 @@ public class Game extends ApplicationAdapter {
 	public static final float WIN_HEIGHT = 800f;
 	public OrthographicCamera cam;
 
-
+	Background test;
 	AssetManager manager = new AssetManager();
 	SpriteBatch batch;
 	Player player;
@@ -36,7 +37,14 @@ public class Game extends ApplicationAdapter {
 		cam.update();
 		batch = new SpriteBatch();
 		player = new Player(manager);
-		manager.load(String.format("%s\\backgrounds\\lvl1.png", System.getProperty("user.dir")), Texture.class);
+	//	while (manager.update()) {System.out.println("Loading textures");}
+		cache_backgrounds(manager);
+		test = new Background(LBackgrounds.LBACKGROUNDS_LVL1_LAYER1.get(),
+				LBackgrounds.LBACKGROUNDS_LVL1_LAYER2.get(),
+				LBackgrounds.LBACKGROUNDS_LVL1_LAYER3.get(),
+				LBackgrounds.LBACKGROUNDS_LVL1_LAYER4.get());
+
+		//manager.load(String.format("%s\\backgrounds\\lvl1.png", System.getProperty("user.dir")), Texture.class);
 	}
 
 	@Override
@@ -45,8 +53,10 @@ public class Game extends ApplicationAdapter {
 			ScreenUtils.clear(0, 0, 0, 1);
 			batch.setProjectionMatrix(cam.combined);
 			batch.begin();
-			batch.draw((Texture) manager.get(String.format("%s\\backgrounds\\lvl1.png", System.getProperty("user.dir"))), 0, 0);
+			//batch.draw((Texture) manager.get(String.format("%s\\backgrounds\\lvl1.png", System.getProperty("user.dir"))), 0, 0);
+			test.draw_back(batch, player, manager);
 			player.update(batch, manager, cam);
+			test.draw_front(batch, player);
 			cam.update();
 			batch.end();
 		}
@@ -60,4 +70,22 @@ public class Game extends ApplicationAdapter {
 		batch.dispose();
 		manager.dispose();
 	}
+
+
+
+	private void cache_backgrounds(AssetManager manager) {
+		String[] paths = new String[LBackgrounds.values().length];
+		for (int i = 0; i < paths.length; ++i) {
+			paths[i] = LBackgrounds.values()[i].get();
+		}
+		// this.atlas_idle = new TextureAtlas(Gdx.files.internal("animations\\ANIM_ENGINE_BASE_IDLE.atlas"));
+		for (String s : paths) {
+			manager.load(s, Texture.class);
+		}
+	}
+
+
 }
+
+
+

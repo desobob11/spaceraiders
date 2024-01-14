@@ -11,7 +11,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.game.sprites.SEngines;
 import com.mygdx.game.sprites.SMainShip;
-import org.w3c.dom.Text;
+
 
 public class Player extends BaseEntity {
     private final float SPAWN_X = Game.WIN_WIDTH / 2;
@@ -89,10 +89,10 @@ public class Player extends BaseEntity {
                 cache_engine(manager.get(SEngines.SENGINES_BASE_POWERING.get()), SEngines.SENGINES_BASE_POWERING.size());
                 is_moving = true;
             }
-            if (cam.position.y + (cam.viewportHeight) <= 3000) {
+           // if (cam.position.y + (cam.viewportHeight) <= 3000) {
                 //  translate(0, MOVE_SPEED);
                 translate(this.direction.x * MOVE_SPEED, this.direction.y * MOVE_SPEED);
-            }
+           // }
         }
         else {
             if (is_moving) {
@@ -138,8 +138,25 @@ public class Player extends BaseEntity {
     }
 
 
+    public Vector2 get_direction() {
+        Vector2 vec;
+        if (this.direction == null) {
+            vec = new Vector2(0, 0);
+        }
+        else {
+            vec = new Vector2(direction.x, direction.y);
+        }
+        return vec;
+    }
+
+
     public boolean isInstantiated() {
         return this.is_instantiated;
+    }
+
+
+    public boolean is_moving() {
+        return Gdx.input.isKeyPressed(Input.Keys.W);
     }
 
 
