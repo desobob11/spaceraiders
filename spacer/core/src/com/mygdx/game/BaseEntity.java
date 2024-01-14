@@ -12,6 +12,8 @@ public abstract class BaseEntity {
     protected Rectangle hbox;
     protected Sprite sprite;
     protected Vector2 rotation;
+    protected Vector2 direction;
+    protected float angle;
 
     protected float x, y;
 
@@ -35,7 +37,42 @@ public abstract class BaseEntity {
 
 
 
+    protected Vector2 get_direction() {
+        Vector2 vec;
+        if (this.direction == null) {
+            vec = new Vector2(0, 0);
+        }
+        else {
+            vec = new Vector2(direction.x, direction.y);
+        }
+        return vec;
+    }
 
+    protected float get_angle() {
+        return this.angle;
+    }
+
+    protected Vector2 get_position() {
+        Vector2 vec;
+        if (this.direction == null) {
+            vec = new Vector2(0, 0);
+        }
+        else {
+            vec = new Vector2(sprite.getX(), sprite.getY());
+        }
+        return vec;
+    }
+
+    protected Vector2 get_muzzle_center() {
+        Vector2 vec;
+        if (this.direction == null) {
+            vec = new Vector2(0, 0);
+        }
+        else {
+            vec = new Vector2(sprite.getX() + direction.cpy().x + sprite.getWidth() / 2, sprite.getY() + direction.cpy().y + sprite.getHeight());
+        }
+        return vec;
+    }
 
     protected abstract void load_resources(AssetManager manager);
 }

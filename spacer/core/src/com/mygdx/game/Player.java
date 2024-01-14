@@ -9,15 +9,18 @@ import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.mygdx.game.sprites.SBullets;
 import com.mygdx.game.sprites.SEngines;
 import com.mygdx.game.sprites.SMainShip;
 import com.mygdx.game.sprites.SWeapons;
+
+import java.util.LinkedList;
+import java.util.Queue;
 
 
 public class Player extends BaseEntity {
     private final float SPAWN_X = Game.WIN_WIDTH / 2;
     private final float SPAWN_Y = Game.WIN_HEIGHT / 2;
-    private Vector2 direction;
 
     private int anim_size;
 
@@ -30,11 +33,11 @@ public class Player extends BaseEntity {
     private Texture engine_texture, weapon_texture;
     private TextureRegion[] engine_frames;
     private float engine_anim_time, weapon_anim_time;
-    private float angle;
     private boolean is_moving;
 
     Animation<TextureRegion> engine_animation;
     Animation<TextureRegion> weapon_animation;
+    LinkedList<Bullet> bullets;
     //TextureAtlas atlas_idle;
 
 
@@ -50,6 +53,9 @@ public class Player extends BaseEntity {
         follow_cursor(cam);
         engine_draw(batch);
         weapon_draw(batch);
+       // clean_bullets(cam);
+        shoot(manager);
+        draw_bullets(batch);
         draw(batch);
     }
 
@@ -72,6 +78,9 @@ public class Player extends BaseEntity {
         this.is_instantiated = true;
         this.rotation = new Vector2(0, 0);
 
+        this.bullets = new LinkedList<>();
+
+
         // base engine ile will be start animation for engine
         this.engine_texture = manager.get(SEngines.SENGINES_BASE_IDLE.get());
         this.weapon_texture = manager.get(SWeapons.SWEAPONS_AUTO.get());
@@ -81,6 +90,43 @@ public class Player extends BaseEntity {
 
     }
 
+    private void shoot(AssetManager manager) {
+        if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
+            bullets.add(new Bullet(SBullets.SBULLETS_BASE.get(), SBullets.SBULLETS_BASE.size(), manager, this));
+        }
+    }
+
+    private void clean_bullets(OrthographicCamera cam) {
+        if (bullets.size() > 0) {
+            int i = bullets.size() - 1;
+            int count = 0;
+            boolean lim_found = false;
+            while (i >= 0 || !lim_found) {
+                Bullet current = bullets.get(i);
+                if (current.get_x() > cam.position.x + cam.viewportWidth || current.get_x() < cam.position.x - cam.viewportWidth) {
+                    ++count;
+                    --i;
+                } else if (current.get_y() > cam.position.y + cam.viewportHeight || current.get_y() < cam.position.y - cam.viewportHeight) {
+                    ++count;
+                    --i;
+                } else {
+                    lim_found = true;
+                }
+            }
+            i = 0;
+            while (i < count) {
+                bullets.remove(0);
+                ++i;
+            }
+        }
+    }
+
+    private void draw_bullets(SpriteBatch batch) {
+        for (Bullet b : bullets) {
+            b.update(batch);
+        }
+        System.out.println(bullets.size());
+    }
 
 
     private void move(OrthographicCamera cam, AssetManager manager) {
@@ -135,16 +181,6 @@ public class Player extends BaseEntity {
     }
 
 
-    public Vector2 get_direction() {
-        Vector2 vec;
-        if (this.direction == null) {
-            vec = new Vector2(0, 0);
-        }
-        else {
-            vec = new Vector2(direction.x, direction.y);
-        }
-        return vec;
-    }
 
 
     public boolean isInstantiated() {

@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.mygdx.game.levels.LBackgrounds;
+import com.mygdx.game.sprites.SBullets;
 import com.mygdx.game.sprites.SMainShip;
 
 public class Game extends ApplicationAdapter {
@@ -39,6 +40,7 @@ public class Game extends ApplicationAdapter {
 		player = new Player(manager);
 	//	while (manager.update()) {System.out.println("Loading textures");}
 		cache_backgrounds(manager);
+		cache_bullets(manager);
 		test = new Background(LBackgrounds.LBACKGROUNDS_LVL1_LAYER1.get(),
 				LBackgrounds.LBACKGROUNDS_LVL1_LAYER2.get(),
 				LBackgrounds.LBACKGROUNDS_LVL1_LAYER3.get(),
@@ -77,6 +79,18 @@ public class Game extends ApplicationAdapter {
 		String[] paths = new String[LBackgrounds.values().length];
 		for (int i = 0; i < paths.length; ++i) {
 			paths[i] = LBackgrounds.values()[i].get();
+		}
+		// this.atlas_idle = new TextureAtlas(Gdx.files.internal("animations\\ANIM_ENGINE_BASE_IDLE.atlas"));
+		for (String s : paths) {
+			manager.load(s, Texture.class);
+		}
+	}
+
+
+	private void cache_bullets(AssetManager manager) {
+		String[] paths = new String[SBullets.values().length];
+		for (int i = 0; i < paths.length; ++i) {
+			paths[i] = SBullets.values()[i].get();
 		}
 		// this.atlas_idle = new TextureAtlas(Gdx.files.internal("animations\\ANIM_ENGINE_BASE_IDLE.atlas"));
 		for (String s : paths) {
