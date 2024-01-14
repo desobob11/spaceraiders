@@ -18,7 +18,7 @@ public class Player extends BaseEntity {
     private final float SPAWN_Y = Game.WIN_HEIGHT / 2;
     private Vector2 direction;
 
-    private final int IDLE_NUM = 3;
+    private int anim_size;
 
 
     private final float MOVE_SPEED = 5f;
@@ -30,6 +30,7 @@ public class Player extends BaseEntity {
     private TextureRegion[] engine_frames;
     private float anim_time;
     private float angle;
+    private boolean is_moving;
 
     Animation<TextureRegion> engine_animation;
     //TextureAtlas atlas_idle;
@@ -43,7 +44,7 @@ public class Player extends BaseEntity {
         if (!is_instantiated) {
             instantiate(manager);
         }
-        move(cam);
+        move(cam, manager);
         follow_cursor(cam);
         engine_draw(batch);
         draw(batch);
@@ -70,61 +71,60 @@ public class Player extends BaseEntity {
 
         // base engine ile will be start animation for engine
         this.engine_texture = manager.get(SEngines.SENGINES_BASE_IDLE.get());
-        cache_engine(engine_texture);
-
-        // start animation time at 0
-        this.anim_time = 0;
+        cache_engine(engine_texture, SEngines.SENGINES_BASE_IDLE.size());
+        is_moving = false;
 
     }
 
 
 
     // hardcoded bounds in this function
-    private void move(OrthographicCamera cam) {
+    private void move(OrthographicCamera cam, AssetManager manager) {
 
         // if player is pressing a movement key
         //if (Gdx.input.isKeyPressed(Input.Keys.W) || Gdx.input.isKeyPressed(Input.Keys.S)) {
         this.velocity = 1f;
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+            if (!is_moving) {
+                cache_engine(manager.get(SEngines.SENGINES_BASE_POWERING.get()), SEngines.SENGINES_BASE_POWERING.size());
+                is_moving = true;
+            }
             if (cam.position.y + (cam.viewportHeight) <= 3000) {
                 //  translate(0, MOVE_SPEED);
                 translate(this.direction.x * MOVE_SPEED, this.direction.y * MOVE_SPEED);
             }
         }
-            /*
-            if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-                if (cam.position.y + (cam.viewportHeight) >= 1400) {
-                    System.out.println(cam.position.y + (cam.viewportHeight));
-                    //  translate(0, -MOVE_SPEED);
-                    translate(-this.direction.x * MOVE_SPEED, -this.direction.y * MOVE_SPEED);
-                }
+        else {
+            if (is_moving) {
+                cache_engine(manager.get(SEngines.SENGINES_BASE_IDLE.get()), SEngines.SENGINES_BASE_IDLE.size());
+                is_moving = false;
             }
-            */
+        }
 
-      //  }
 
         // otherwise move until acceleration is drained
-        else {
+      //  else {
                 // need to set up velocity decay here
 
-            }
+          //  }
             // check if one second has passed
         cam.position.set(sprite.getX() + sprite.getOriginX(), sprite.getY() + sprite.getOriginY(), 0);
     }
 
-    private void cache_engine(Texture sheet) {
-        TextureRegion[][] temp = TextureRegion.split(sheet, sheet.getWidth() / IDLE_NUM,
+    private void cache_engine(Texture sheet, int size) {
+        TextureRegion[][] temp = TextureRegion.split(sheet, sheet.getWidth() / size,
                 sheet.getHeight());
 
-        this.engine_frames = new TextureRegion[IDLE_NUM];
+        this.engine_frames = new TextureRegion[size];
         int index = 0;
         for (int i = 0; i < 1; ++i) {
-            for (int j = 0; j < IDLE_NUM; ++j) {
+            for (int j = 0; j < size; ++j) {
                 this.engine_frames[index] = temp[i][j];
                 ++index;
             }
         }
         this.engine_animation = new Animation<TextureRegion>(0.05f, this.engine_frames);
+        this.anim_time = 0;
     }
 
     private void engine_draw(SpriteBatch batch) {
