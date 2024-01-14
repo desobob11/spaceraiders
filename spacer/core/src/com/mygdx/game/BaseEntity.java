@@ -8,7 +8,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.sprites.SMainShip;
 
-public class BaseEntity {
+public abstract class BaseEntity {
     protected Rectangle hbox;
     protected Sprite sprite;
     protected Vector2 rotation;
@@ -35,4 +35,7 @@ public class BaseEntity {
 
 
 
+
+
+    protected abstract void load_resources(AssetManager manager);
 }

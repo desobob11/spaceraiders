@@ -1,8 +1,10 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -19,9 +21,14 @@ public class Game extends ApplicationAdapter {
 	Player player;
 	float camera_zoom = 0.3f;
 
+	Pixmap curs;
+
+
 
 	@Override
 	public void create () {
+		curs = new Pixmap(Gdx.files.internal("misc\\crosshair.png"));
+		Gdx.graphics.setCursor(Gdx.graphics.newCursor(curs, 0, 0));
 		cam = new OrthographicCamera(WIN_WIDTH, WIN_HEIGHT);
 		cam.position.set(WIN_WIDTH / 2, WIN_HEIGHT / 2, 0);
 		cam.zoom -= camera_zoom;
