@@ -123,7 +123,7 @@ public class Player extends BaseEntity {
                 ++index;
             }
         }
-        this.engine_animation = new Animation<TextureRegion>(0.05f, this.engine_frames);
+        this.engine_animation = new Animation<TextureRegion>(0.08f, this.engine_frames);
         this.anim_time = 0;
     }
 

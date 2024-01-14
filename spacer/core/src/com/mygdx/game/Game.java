@@ -25,6 +25,7 @@ public class Game extends ApplicationAdapter {
 
 
 
+
 	@Override
 	public void create () {
 		curs = new Pixmap(Gdx.files.internal("misc\\crosshair.png"));

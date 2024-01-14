@@ -2,7 +2,9 @@ package com.mygdx.game.sprites;
 
 public enum SEngines {
     SENGINES_BASE_IDLE("Main Ship - Engines - Base Engine - Idle.png", 3),
-    SENGINES_BASE_POWERING("Main Ship - Engines - Base Engine - Powering.png", 4);
+    SENGINES_BASE_POWERING("Main Ship - Engines - Base Engine - Powering.png", 4),
+    SENGINES_PULSE_IDLE("Main Ship - Engines - Big Pulse Engine - Idle.png", 4),
+    SENGINES_PULSE_POWERING("Main Ship - Engines - Big Pulse Engine - Powering.png", 4);
 
     private final String path;
     private final int size;
