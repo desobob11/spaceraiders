@@ -11,6 +11,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.game.sprites.SEngines;
 import com.mygdx.game.sprites.SMainShip;
+import com.mygdx.game.sprites.SWeapons;
 
 
 public class Player extends BaseEntity {
@@ -26,13 +27,14 @@ public class Player extends BaseEntity {
     private float velocity;
 
     private double move_clock;
-    private Texture engine_texture;
+    private Texture engine_texture, weapon_texture;
     private TextureRegion[] engine_frames;
-    private float anim_time;
+    private float engine_anim_time, weapon_anim_time;
     private float angle;
     private boolean is_moving;
 
     Animation<TextureRegion> engine_animation;
+    Animation<TextureRegion> weapon_animation;
     //TextureAtlas atlas_idle;
 
 
@@ -47,6 +49,7 @@ public class Player extends BaseEntity {
         move(cam, manager);
         follow_cursor(cam);
         engine_draw(batch);
+        weapon_draw(batch);
         draw(batch);
     }
 
@@ -71,6 +74,8 @@ public class Player extends BaseEntity {
 
         // base engine ile will be start animation for engine
         this.engine_texture = manager.get(SEngines.SENGINES_BASE_IDLE.get());
+        this.weapon_texture = manager.get(SWeapons.SWEAPONS_AUTO.get());
+        cache_weapon(weapon_texture, SWeapons.SWEAPONS_AUTO.size());
         cache_engine(engine_texture, SEngines.SENGINES_BASE_IDLE.size());
         is_moving = false;
 
@@ -78,21 +83,15 @@ public class Player extends BaseEntity {
 
 
 
-    // hardcoded bounds in this function
     private void move(OrthographicCamera cam, AssetManager manager) {
 
-        // if player is pressing a movement key
-        //if (Gdx.input.isKeyPressed(Input.Keys.W) || Gdx.input.isKeyPressed(Input.Keys.S)) {
         this.velocity = 1f;
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
             if (!is_moving) {
                 cache_engine(manager.get(SEngines.SENGINES_BASE_POWERING.get()), SEngines.SENGINES_BASE_POWERING.size());
                 is_moving = true;
             }
-           // if (cam.position.y + (cam.viewportHeight) <= 3000) {
-                //  translate(0, MOVE_SPEED);
-                translate(this.direction.x * MOVE_SPEED, this.direction.y * MOVE_SPEED);
-           // }
+            translate(this.direction.x * MOVE_SPEED, this.direction.y * MOVE_SPEED);
         }
         else {
             if (is_moving) {
@@ -100,36 +99,34 @@ public class Player extends BaseEntity {
                 is_moving = false;
             }
         }
-
-
-        // otherwise move until acceleration is drained
-      //  else {
-                // need to set up velocity decay here
-
-          //  }
-            // check if one second has passed
         cam.position.set(sprite.getX() + sprite.getOriginX(), sprite.getY() + sprite.getOriginY(), 0);
     }
 
-    private void cache_engine(Texture sheet, int size) {
-        TextureRegion[][] temp = TextureRegion.split(sheet, sheet.getWidth() / size,
-                sheet.getHeight());
 
-        this.engine_frames = new TextureRegion[size];
-        int index = 0;
-        for (int i = 0; i < 1; ++i) {
-            for (int j = 0; j < size; ++j) {
-                this.engine_frames[index] = temp[i][j];
-                ++index;
-            }
+
+
+    private void weapon_draw(SpriteBatch batch) {
+        TextureRegion frame;
+        Sprite frame_sprite;
+
+        if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
+            weapon_anim_time += Gdx.graphics.getDeltaTime();
+            frame = this.weapon_animation.getKeyFrame(weapon_anim_time, true);
         }
-        this.engine_animation = new Animation<TextureRegion>(0.08f, this.engine_frames);
-        this.anim_time = 0;
+        else {
+            frame = this.weapon_animation.getKeyFrame(0f, true);
+        }
+        frame_sprite = new Sprite(frame);
+        frame_sprite.setOriginCenter();
+        frame_sprite.setPosition(sprite.getX(), sprite.getY());
+        frame_sprite.setRotation(sprite.getRotation());
+        frame_sprite.draw(batch);
     }
 
+
     private void engine_draw(SpriteBatch batch) {
-        anim_time += Gdx.graphics.getDeltaTime();
-        TextureRegion frame = this.engine_animation.getKeyFrame(anim_time, true);
+        engine_anim_time += Gdx.graphics.getDeltaTime();
+        TextureRegion frame = this.engine_animation.getKeyFrame(engine_anim_time, true);
         Sprite frame_sprite = new Sprite(frame);
         frame_sprite.setOriginCenter();
         frame_sprite.setPosition(sprite.getX(), sprite.getY());
@@ -186,6 +183,48 @@ public class Player extends BaseEntity {
         }
         // this.atlas_idle = new TextureAtlas(Gdx.files.internal("animations\\ANIM_ENGINE_BASE_IDLE.atlas"));
         base_load_textures(manager, paths);
+
+
+        // load weapon animation textures
+        paths = new String[SWeapons.values().length];
+        for (int i = 0; i < paths.length; ++i) {
+            paths[i] = SWeapons.values()[i].get();
+        }
+        // this.atlas_idle = new TextureAtlas(Gdx.files.internal("animations\\ANIM_ENGINE_BASE_IDLE.atlas"));
+        base_load_textures(manager, paths);
+    }
+
+
+    private void cache_engine(Texture sheet, int size) {
+        TextureRegion[][] temp = TextureRegion.split(sheet, sheet.getWidth() / size,
+                sheet.getHeight());
+
+        this.engine_frames = new TextureRegion[size];
+        int index = 0;
+        for (int i = 0; i < 1; ++i) {
+            for (int j = 0; j < size; ++j) {
+                this.engine_frames[index] = temp[i][j];
+                ++index;
+            }
+        }
+        this.engine_animation = new Animation<TextureRegion>(0.08f, this.engine_frames);
+        this.engine_anim_time = 0;
+    }
+
+    private void cache_weapon(Texture sheet, int size) {
+        TextureRegion[][] temp = TextureRegion.split(sheet, sheet.getWidth() / size,
+                sheet.getHeight());
+
+        this.engine_frames = new TextureRegion[size];
+        int index = 0;
+        for (int i = 0; i < 1; ++i) {
+            for (int j = 0; j < size; ++j) {
+                this.engine_frames[index] = temp[i][j];
+                ++index;
+            }
+        }
+        this.weapon_animation = new Animation<TextureRegion>(0.03f, this.engine_frames);
+        this.weapon_anim_time = 0;
     }
 
 

@@ -17,10 +17,10 @@ public class Background {
     private Vector2 player_dir;
     private Sprite sp1, sp2, sp3, sp4;
 
-    float off1 = 0.1f;
-    float off2 = 0.4f;
-    float off3 = 0.8f;
-    float off4 = 1f;
+    float off1 = 1f;
+    float off2 = 2f;
+    float off3 = 3f;
+    float off4 = 4f;
     boolean is_instantiated;
 
 
