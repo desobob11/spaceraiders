@@ -28,13 +28,16 @@ public class Bullet {
     Vector2 spawn;
 
 
+
     public Bullet(String s, int size, AssetManager manager, BaseEntity ent) {
         Texture text = manager.get(s);
         this.direction = ent.get_direction();
         this.rotation = -ent.get_angle();
-        //this.spawn = ent.get_muzzle_center();
-        this.spawn = ent.get_position();
-        this.sprite = new Sprite();
+        this.spawn = ent.get_muzzle_center();
+       // this.spawn = ent.get_position();
+
+      //  this.sprite = new Sprite();
+       // this.sprite.setPosition(spawn.x, spawn.y);
         cache_animation(text, size);
 
     }
@@ -61,20 +64,19 @@ public class Bullet {
 
     private void draw(SpriteBatch batch) {
         TextureRegion frame;
+        anim_time += Gdx.graphics.getDeltaTime();
+        frame = this.anim.getKeyFrame(anim_time, true);
 
-        if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
-            anim_time += Gdx.graphics.getDeltaTime();
-            frame = this.anim.getKeyFrame(anim_time, true);
-        }
-        else {
-            frame = this.anim.getKeyFrame(0f, true);
-        }
-        this.sprite.setTexture(frame.getTexture());
+        //this.sprite.setTexture(frame.getTexture());
+        this.sprite = new Sprite(frame.getTexture());
+        this.sprite.setPosition(spawn.x, spawn.y);
         this.sprite.setOriginCenter();
         this.sprite.setRotation(this.rotation);
+        this.sprite.rotate(90);
         // draw at first position, then translate for next draw
         this.sprite.draw(batch);
-        this.sprite.translate(SPEED * direction.x, SPEED * direction.y);
+        this.spawn.add(SPEED * direction.x, SPEED * direction.y);
+       // this.sprite.translate(SPEED * direction.x, SPEED * direction.y);
     }
 
 

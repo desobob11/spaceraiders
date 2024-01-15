@@ -54,7 +54,7 @@ public abstract class BaseEntity {
 
     protected Vector2 get_position() {
         Vector2 vec;
-        if (this.direction == null) {
+        if (this.sprite == null) {
             vec = new Vector2(0, 0);
         }
         else {
@@ -69,7 +69,10 @@ public abstract class BaseEntity {
             vec = new Vector2(0, 0);
         }
         else {
-            vec = new Vector2(sprite.getX() + direction.cpy().x + sprite.getWidth() / 2, sprite.getY() + direction.cpy().y + sprite.getHeight());
+            // hacky 4 here
+            direction.nor();
+            sprite.setOriginCenter();
+            vec = new Vector2(sprite.getX() + sprite.getOriginX(), sprite.getY() + sprite.getOriginY());
         }
         return vec;
     }

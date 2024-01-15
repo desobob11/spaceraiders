@@ -124,8 +124,9 @@ public class Player extends BaseEntity {
     private void draw_bullets(SpriteBatch batch) {
         for (Bullet b : bullets) {
             b.update(batch);
+            System.out.println(b.sprite.getX());
+            System.out.println(b.sprite.getY());
         }
-        System.out.println(bullets.size());
     }
 
 
