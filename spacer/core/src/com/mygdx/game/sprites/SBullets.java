@@ -2,7 +2,7 @@ package com.mygdx.game.sprites;
 
 public enum SBullets {
 
-    SBULLETS_BASE("Fx_01.png", 3);
+    SBULLETS_BASE("Fx_02.png", 3);
 
 
     private final String path;
