@@ -17,15 +17,17 @@ import com.mygdx.game.sprites.SWeapons;
 
 
 public class Bullet {
-    Vector2 direction;
-    Sprite sprite;
-    Rectangle hbox;
-    Animation<TextureRegion> anim;
+   private Vector2 direction;
+    private  Sprite sprite;
+    private  Rectangle hbox;
+    private Animation<TextureRegion> anim;
     private final float SPEED = 10f;
-    TextureRegion[] frames;
-    float anim_time;
-    float rotation;
-    Vector2 spawn;
+    private TextureRegion[] frames;
+    private  float anim_time;
+    private  float rotation;
+    private Vector2 spawn;
+    private double life_time;
+    private final double TTL  = 5f;
 
 
 
@@ -34,11 +36,13 @@ public class Bullet {
         this.direction = ent.get_direction();
         this.rotation = -ent.get_angle();
         this.spawn = ent.get_muzzle_center();
+        this.life_time = 0;
        // this.spawn = ent.get_position();
 
       //  this.sprite = new Sprite();
        // this.sprite.setPosition(spawn.x, spawn.y);
         cache_animation(text, size);
+        this.sprite = new Sprite(anim.getKeyFrame(0f, true));
 
     }
 
@@ -59,18 +63,14 @@ public class Bullet {
     }
 
     public void update(SpriteBatch batch) {
+        this.life_time += Gdx.graphics.getDeltaTime();
         draw(batch);
     }
 
     private void draw(SpriteBatch batch) {
-        TextureRegion frame;
         anim_time += Gdx.graphics.getDeltaTime();
-        frame = this.anim.getKeyFrame(anim_time, true);
-
-        //this.sprite.setTexture(frame.getTexture());
-        this.sprite = new Sprite(frame.getTexture());
+        this.sprite = new Sprite(anim.getKeyFrame(anim_time, true));
         this.sprite.setPosition(spawn.x, spawn.y);
-        //this.sprite.setOriginCenter();
         this.sprite.setOrigin(0, this.sprite.getHeight() / 2);
         this.sprite.setRotation(this.rotation);
        this.sprite.rotate(90);
@@ -90,7 +90,9 @@ public class Bullet {
     }
 
 
-
+    public boolean past_lifetime() {
+        return this.life_time > TTL;
+    }
 
 
 

@@ -55,6 +55,7 @@ public class Player extends BaseEntity {
         weapon_draw(batch);
        // clean_bullets(cam);
         shoot(manager);
+        clean_bullets(cam);
         draw_bullets(batch);
         draw(batch);
     }
@@ -68,7 +69,6 @@ public class Player extends BaseEntity {
         this.angle = (float) Math.toDegrees(this.angle);
         this.direction = new Vector2(sub.x, sub.y);
         this.sprite.setRotation(-this.angle);
-        System.out.println(cam.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0)));
     }
 
     public void instantiate(AssetManager manager) {
@@ -98,36 +98,23 @@ public class Player extends BaseEntity {
     }
 
     private void clean_bullets(OrthographicCamera cam) {
-        if (bullets.size() > 0) {
-            int i = bullets.size() - 1;
-            int count = 0;
-            boolean lim_found = false;
-            while (i >= 0 || !lim_found) {
-                Bullet current = bullets.get(i);
-                if (current.get_x() > cam.position.x + cam.viewportWidth || current.get_x() < cam.position.x - cam.viewportWidth) {
-                    ++count;
-                    --i;
-                } else if (current.get_y() > cam.position.y + cam.viewportHeight || current.get_y() < cam.position.y - cam.viewportHeight) {
-                    ++count;
-                    --i;
-                } else {
-                    lim_found = true;
-                }
-            }
-            i = 0;
-            while (i < count) {
-                bullets.remove(0);
-                ++i;
+        int count = 0;
+        for (int i = 0; i < bullets.size(); ++i) {
+            if (bullets.get(i).past_lifetime()) {
+                ++count;
             }
         }
+
+        for (int i = 0; i < count; ++i) {
+            bullets.remove(0);
+        }
+        System.out.println(bullets.size());
     }
 
     private void draw_bullets(SpriteBatch batch) {
         for (Bullet b : bullets) {
             b.update(batch);
-           // System.out.println(b.sprite.getX());
-           // System.out.println(b.sprite.getY());
-            //System.out.println(this.get_muzzle_center());
+
 
         }
     }
