@@ -29,6 +29,9 @@ public class Player extends BaseEntity {
     private boolean is_instantiated = false;
     private float velocity;
 
+    private double shoot_delay;
+    private final static double SHOOT_DEL = 0.1f;
+
     private double move_clock;
     private Texture engine_texture, weapon_texture;
     private TextureRegion[] engine_frames;
@@ -72,6 +75,7 @@ public class Player extends BaseEntity {
     }
 
     public void instantiate(AssetManager manager) {
+        this.shoot_delay = 0f;
         this.sprite = new Sprite((Texture) manager.get(SMainShip.SMAINSHIP_FULL.get()));
         this.sprite.setPosition(SPAWN_X, SPAWN_Y);
         this.sprite.setOriginCenter();
@@ -92,8 +96,10 @@ public class Player extends BaseEntity {
     }
 
     private void shoot(AssetManager manager) {
-        if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
+        shoot_delay += Gdx.graphics.getDeltaTime();
+        if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && shoot_delay >= SHOOT_DEL) {
             bullets.add(new Bullet(SBullets.SBULLETS_BASE.get(), SBullets.SBULLETS_BASE.size(), manager, this));
+            shoot_delay = 0;
         }
     }
 
