@@ -70,13 +70,14 @@ public class Bullet {
         //this.sprite.setTexture(frame.getTexture());
         this.sprite = new Sprite(frame.getTexture());
         this.sprite.setPosition(spawn.x, spawn.y);
-        this.sprite.setOriginCenter();
-        //this.sprite.setRotation(this.rotation);
-       // this.sprite.rotate(90);
+        //this.sprite.setOriginCenter();
+        this.sprite.setOrigin(0, this.sprite.getHeight() / 2);
+        this.sprite.setRotation(this.rotation);
+       this.sprite.rotate(90);
         // draw at first position, then translate for next draw
         this.sprite.draw(batch);
-       // this.spawn.add(SPEED * direction.x, SPEED * direction.y);
-       // this.sprite.translate(SPEED * direction.x, SPEED * direction.y);
+        this.spawn.add(SPEED * direction.x, SPEED * direction.y);
+
     }
 
 

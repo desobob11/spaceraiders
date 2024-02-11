@@ -75,7 +75,7 @@ public abstract class BaseEntity {
             // first set to top center of sprite as if there was no rotation
             vec = new Vector2(sprite.getX() + sprite.getOriginX(), sprite.getY() + sprite.getOriginY());
             // then multiply by direction vector
-            vec.add(this.sprite.getWidth() * this.direction.x, this.sprite.getHeight() * this.direction.y);
+            vec.add(this.sprite.getWidth() / 2 * this.direction.x, this.sprite.getHeight() / 2 * this.direction.y);
         }
         return vec;
     }
