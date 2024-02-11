@@ -9,8 +9,8 @@ public enum SWeapons {
     private final int size;
 
     SWeapons(String filename, int size) {
-        String root = String.format("%s\\Main Ship - Weapons\\PNGs", System.getProperty("user.dir"));
-        this.path = String.format("%s\\%s",root, filename);
+        String root = String.format("%s/Main Ship - Weapons/PNGs", System.getProperty("user.dir"));
+        this.path = String.format("%s/%s",root, filename);
         this.size = size;
     }
 

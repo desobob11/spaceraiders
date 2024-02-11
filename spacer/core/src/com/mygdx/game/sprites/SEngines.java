@@ -10,8 +10,8 @@ public enum SEngines {
     private final int size;
 
     SEngines(String filename, int size) {
-        String root = String.format("%s\\Main Ship - Engine Effects\\PNGs", System.getProperty("user.dir"));
-        this.path = String.format("%s\\%s",root, filename);
+        String root = String.format("%s/Main Ship - Engine Effects/PNGs", System.getProperty("user.dir"));
+        this.path = String.format("%s/%s",root, filename);
         this.size = size;
     }
 

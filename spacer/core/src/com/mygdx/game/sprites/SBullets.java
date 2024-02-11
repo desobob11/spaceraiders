@@ -9,8 +9,8 @@ public enum SBullets {
     private final int size;
 
     SBullets(String filename, int size) {
-        String root = String.format("%s\\Effects", System.getProperty("user.dir"));
-        this.path = String.format("%s\\%s",root, filename);
+        String root = String.format("%s/Effects", System.getProperty("user.dir"));
+        this.path = String.format("%s/%s",root, filename);
         this.size = size;
     }
 
