@@ -68,6 +68,7 @@ public class Player extends BaseEntity {
         this.angle = (float) Math.toDegrees(this.angle);
         this.direction = new Vector2(sub.x, sub.y);
         this.sprite.setRotation(-this.angle);
+        System.out.println(cam.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0)));
     }
 
     public void instantiate(AssetManager manager) {
@@ -124,8 +125,10 @@ public class Player extends BaseEntity {
     private void draw_bullets(SpriteBatch batch) {
         for (Bullet b : bullets) {
             b.update(batch);
-            System.out.println(b.sprite.getX());
-            System.out.println(b.sprite.getY());
+           // System.out.println(b.sprite.getX());
+           // System.out.println(b.sprite.getY());
+            //System.out.println(this.get_muzzle_center());
+
         }
     }
 

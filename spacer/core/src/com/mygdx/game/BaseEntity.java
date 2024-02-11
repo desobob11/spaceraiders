@@ -72,7 +72,10 @@ public abstract class BaseEntity {
             // hacky 4 here
             direction.nor();
             sprite.setOriginCenter();
+            // first set to top center of sprite as if there was no rotation
             vec = new Vector2(sprite.getX() + sprite.getOriginX(), sprite.getY() + sprite.getOriginY());
+            // then multiply by direction vector
+            vec.add(this.sprite.getWidth() * this.direction.x, this.sprite.getHeight() * this.direction.y);
         }
         return vec;
     }
