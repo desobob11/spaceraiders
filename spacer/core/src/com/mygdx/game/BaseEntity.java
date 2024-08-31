@@ -12,6 +12,8 @@ public abstract class BaseEntity {
     protected Rectangle hbox;
     protected Sprite sprite;
     protected Vector2 rotation;
+    protected Vector2 direction;
+    protected float angle;
 
     protected float x, y;
 
@@ -35,7 +37,48 @@ public abstract class BaseEntity {
 
 
 
+    protected Vector2 get_direction() {
+        Vector2 vec;
+        if (this.direction == null) {
+            vec = new Vector2(0, 0);
+        }
+        else {
+            vec = new Vector2(direction.x, direction.y);
+        }
+        return vec;
+    }
 
+    protected float get_angle() {
+        return this.angle;
+    }
+
+    protected Vector2 get_position() {
+        Vector2 vec;
+        if (this.sprite == null) {
+            vec = new Vector2(0, 0);
+        }
+        else {
+            vec = new Vector2(sprite.getX(), sprite.getY());
+        }
+        return vec;
+    }
+
+    protected Vector2 get_muzzle_center() {
+        Vector2 vec;
+        if (this.direction == null) {
+            vec = new Vector2(0, 0);
+        }
+        else {
+            // hacky 4 here
+            //direction.nor();
+            sprite.setOriginCenter();
+            // first set to top center of sprite as if there was no rotation
+            vec = new Vector2(sprite.getX() + sprite.getOriginX(), sprite.getY() + sprite.getOriginY());
+            // then multiply by direction vector
+            vec.add(this.sprite.getWidth() / 4 * this.direction.x, this.sprite.getHeight() / 4 * this.direction.y);
+        }
+        return vec;
+    }
 
     protected abstract void load_resources(AssetManager manager);
 }

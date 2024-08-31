@@ -14,8 +14,8 @@ public enum SMainShip {
     private final String path;
 
     SMainShip(String filename) {
-        String root = String.format("%s\\Main Ship - Bases\\PNGs", System.getProperty("user.dir"));
-        this.path = String.format("%s\\%s",root, filename);
+        String root = String.format("%s/Main Ship - Bases/PNGs", System.getProperty("user.dir"));
+        this.path = String.format("%s/%s",root, filename);
     }
 
     public String get() {
